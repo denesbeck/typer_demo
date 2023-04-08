@@ -25,13 +25,13 @@ existing_usernames = ["rick", "morty"]
 
 @app.command()
 def hello(name: str, lastname: str = ""):
-    """This command will greet the user"""
+    """Greets the user"""
     print(f'Hello {name} {lastname}')
 
 
 @app.command()
 def goodbye(name: str, lastname: str = "", formal: bool = False):
-    """This command will say goodbye to a user"""
+    """Says goodbye to the user"""
     if formal:
         print(f"Goodbye Mr. {name} {lastname}. Have a good day.")
     else:
@@ -40,6 +40,7 @@ def goodbye(name: str, lastname: str = "", formal: bool = False):
 
 @app.command()
 def printTable():
+    """Prints a table"""
     table = Table("Name", "Item")
     table.add_row("Rick", "Portal Gun")
     table.add_row("Morty", "Plumbus")
@@ -48,11 +49,13 @@ def printTable():
 
 @app.command()
 def printMarkup():
+    """Demonstrates how markup can be printed"""
     print("[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:")
 
 
 @app.command()
 def getData():
+    """Prints out data colored"""
     print("Here's the data")
     print(data)
 
@@ -81,6 +84,7 @@ def createUser(username: str):
 
 @app.command()
 def optionalArg(name: Optional[str] = typer.Argument(None)):
+    """Demonstrates optional arguments"""
     if name is None:
         print("Hello World")
     else:
@@ -101,6 +105,19 @@ def dynamicArg(name: str = typer.Argument(get_random_name, help="The random name
 def greet(name: Optional[str] = typer.Argument('World', metavar="✨username✨", help="Who to greet", show_default=True)):
     """Say hi to NAME politely"""
     print(f"Hello {name}")
+
+
+@app.command()
+def secondaryArgs(name: str = typer.Argument(..., help="Who to greet", show_default=False),
+                  lastname: str = typer.Argument("", help="The last name", hidden=False, rich_help_panel="Secondary Arguments"),
+                  age: int = typer.Argument(0, help="The user's age", show_default=False, rich_help_panel="Secondary Arguments")):
+    print(f"{name} {lastname} ({age})") 
+
+
+@app.command()
+def envVars(day: str = typer.Argument(..., envvar='TODAY', help='If DAY is ommitted, value comes from envvar TODAY', show_default=False, show_envvar=True)):
+    """Demonstrates envvar functionality"""
+    print(f"Today is {day}")
 
 
 if __name__ == "__main__":
